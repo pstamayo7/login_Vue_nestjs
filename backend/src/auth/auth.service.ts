@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { UnauthorizedException } from '@nestjs/common'; 
+import { RegisterDto } from './register.dto';  // Asegúrate de tener el DTO correcto
 
 @Injectable()
 export class AuthService {
@@ -30,15 +31,19 @@ export class AuthService {
     };
   }
 
-  // Método para el registro
-  async register(user: any) {
-    // Encriptamos la contraseña antes de guardarla
-    const hashedPassword = await bcrypt.hash(user.password, 10);  // '10' es el número de rondas de encriptación
+ 
+  async register(registerDto: RegisterDto) {
+    const { first_name, last_name, email, password } = registerDto;
 
-    // Guardamos al usuario con la contraseña encriptada
+    // Encriptar la contraseña antes de guardarla
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Crear el nuevo usuario con nombre, apellido, email y contraseña encriptada
     return await this.usersService.create({
-      ...user,
-      password: hashedPassword,  // Asegúrate de guardar la contraseña encriptada
+      first_name,
+      last_name,
+      email,
+      password: hashedPassword,  // Guardar la contraseña encriptada
     });
   }
 }

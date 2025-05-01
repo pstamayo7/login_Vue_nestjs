@@ -1,7 +1,27 @@
 <template>
-  <div class="login">
-    <h2>Login</h2>
-    <form @submit.prevent="handleLogin">
+  <div class="register-form">
+    <h2>Register</h2>
+    <form @submit.prevent="handleRegister">
+      <div class="form-group">
+        <label for="first_name">Name</label>
+        <input
+          type="text"
+          id="firs_name"
+          v-model="first_name"
+          required
+          placeholder="Enter your full name"
+        />
+      </div>
+      <div class="form-group">
+        <label for="last_name">Surname</label>
+        <input
+          type="text"
+          id="last_name"
+          v-model="last_name"
+          required
+          placeholder="Enter your surname"
+        />
+      </div>
       <div class="form-group">
         <label for="email">Email</label>
         <input
@@ -22,9 +42,14 @@
           placeholder="Enter your password"
         />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">Register</button>
     </form>
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
+
+    <p>
+      Already have an account? 
+      <a href="#" @click.prevent="goToLogin">Login here</a>
+    </p>
   </div>
 </template>
 
@@ -34,40 +59,39 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      first_name: '',
+      last_name: '',
       email: '',
       password: '',
       errorMessage: '',
     };
   },
   methods: {
-    async handleLogin() {
+    async handleRegister() {
       try {
-        // Enviar los datos de login al backend
-        const response = await axios.post('http://localhost:3000/auth/login', {
+        // Enviar los datos al backend para registrar el usuario
+        await axios.post('http://localhost:3000/auth/register', {
+          first_name: this.first_name,
+          last_name: this.last_name,
           email: this.email,
           password: this.password,
         });
 
-        // Si el login es exitoso, guardar el token
-        localStorage.setItem('token', response.data.access_token);
-
-        // Puedes redirigir a una nueva página, por ejemplo, dashboard.
-        alert('Login Successful!');
+        alert('Registration successful!');
+        this.$emit('go-to-login');  // Emitir evento para ir al login
       } catch (error) {
-        // Si las credenciales son incorrectas, mostrar un error
-        if (error.response && error.response.status === 401) {
-          this.errorMessage = 'Invalid credentials, please try again.';
-        } else {
-          this.errorMessage = 'An error occurred, please try again later.';
-        }
+        this.errorMessage = 'An error occurred. Please try again later.';
       }
+    },
+    goToLogin() {
+      this.$emit('go-to-login');  // Emitir evento para ir al login
     },
   },
 };
 </script>
 
 <style scoped>
-.login {
+.register-form {
   max-width: 400px;
   margin: 0 auto;
   padding: 1em;
@@ -110,5 +134,15 @@ button:hover {
 .error {
   color: red;
   margin-top: 1em;
+}
+
+p {
+  margin-top: 1em;
+  text-align: center;
+}
+
+a {
+  color: #4CAF50;
+  cursor: pointer;
 }
 </style>

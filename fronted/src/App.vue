@@ -1,26 +1,29 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <LoginForm v-if="showLogin" @go-to-register="showRegister = true; showLogin = false" />
+    <RegisterForm v-if="showRegister" @go-to-login="showRegister = false; showLogin = true" />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import LoginForm from './components/LoginForm.vue';
+import RegisterForm from './components/RegisterForm.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    LoginForm,
+    RegisterForm,
+  },
+  data() {
+    return {
+      showLogin: true,  // Por defecto, mostrar el formulario de login
+      showRegister: false,  // No mostrar el formulario de registro al principio
+    };
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+/* Aquí puedes agregar estilos globales */
 </style>

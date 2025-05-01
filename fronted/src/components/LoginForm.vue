@@ -25,6 +25,11 @@
       <button type="submit">Login</button>
     </form>
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
+
+    <p>
+      Don't have an account? 
+      <a href="#" @click.prevent="goToRegister">Register here</a>
+    </p>
   </div>
 </template>
 
@@ -42,25 +47,23 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        // Enviar los datos de login al backend
         const response = await axios.post('http://localhost:3000/auth/login', {
           email: this.email,
           password: this.password,
         });
 
-        // Si el login es exitoso, guardar el token
         localStorage.setItem('token', response.data.access_token);
-
-        // Puedes redirigir a una nueva página, por ejemplo, dashboard.
-        alert('Login Successful!');
+        alert('Login successful!');
       } catch (error) {
-        // Si las credenciales son incorrectas, mostrar un error
         if (error.response && error.response.status === 401) {
-          this.errorMessage = 'Invalid credentials, please try again.';
+          this.errorMessage = 'Invalid credentials. Please try again.';
         } else {
           this.errorMessage = 'An error occurred, please try again later.';
         }
       }
+    },
+    goToRegister() {
+      this.$emit('go-to-register');  // Emit event to go to register page
     },
   },
 };
@@ -110,5 +113,15 @@ button:hover {
 .error {
   color: red;
   margin-top: 1em;
+}
+
+p {
+  margin-top: 1em;
+  text-align: center;
+}
+
+a {
+  color: #4CAF50;
+  cursor: pointer;
 }
 </style>

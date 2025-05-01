@@ -4,6 +4,7 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';  // Importamos el UsersModule aquí
 
+
 @Module({
   imports: [
     JwtModule.register({

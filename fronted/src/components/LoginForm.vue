@@ -1,35 +1,32 @@
 <template>
-  <div class="login">
-    <h2>Login</h2>
-    <form @submit.prevent="handleLogin">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          v-model="email"
-          required
-          placeholder="Enter your email"
-        />
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          v-model="password"
-          required
-          placeholder="Enter your password"
-        />
-      </div>
-      <button type="submit">Login</button>
-    </form>
-    <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
-
-    <p>
-      Don't have an account? 
-      <a href="#" @click.prevent="goToRegister">Register here</a>
-    </p>
+  <div class="login-container">
+    <div class="login-card">
+      <h2 class="title">Welcome back</h2>
+      <form @submit.prevent="handleLogin">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            v-model="email"
+            required
+            placeholder="Enter your email"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            v-model="password"
+            required
+            placeholder="Enter your password"
+          />
+        </div>
+        <button type="submit">Log In</button>
+        <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -54,6 +51,7 @@ export default {
 
         localStorage.setItem('token', response.data.access_token);
         alert('Login successful!');
+        this.$emit('go-to-register');
       } catch (error) {
         if (error.response && error.response.status === 401) {
           this.errorMessage = 'Invalid credentials. Please try again.';
@@ -62,66 +60,83 @@ export default {
         }
       }
     },
-    goToRegister() {
-      this.$emit('go-to-register');  // Emit event to go to register page
-    },
   },
 };
 </script>
 
 <style scoped>
-.login {
+/* Container to center the login card */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+/* Card with shadow and rounded corners */
+.login-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
   max-width: 400px;
-  margin: 0 auto;
-  padding: 1em;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+}
+
+.title {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+  font-weight: 600;
 }
 
 .form-group {
-  margin-bottom: 1em;
+  margin-bottom: 1.2rem;
 }
 
 label {
   display: block;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
 }
 
 input {
   width: 100%;
-  padding: 0.8em;
-  font-size: 1em;
+  padding: 0.8rem;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+
+input:focus {
+  border-color: #4caf50;
+  outline: none;
 }
 
 button {
   width: 100%;
-  padding: 1em;
-  font-size: 1em;
-  background-color: #4CAF50;
+  padding: 0.9rem;
+  background-color: #4caf50;
   color: white;
+  font-size: 1rem;
+  font-weight: 600;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #43a047;
 }
 
 .error {
-  color: red;
-  margin-top: 1em;
-}
-
-p {
-  margin-top: 1em;
+  color: #d32f2f;
+  margin-top: 1rem;
   text-align: center;
-}
-
-a {
-  color: #4CAF50;
-  cursor: pointer;
+  font-size: 0.95rem;
 }
 </style>

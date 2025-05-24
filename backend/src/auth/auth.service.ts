@@ -22,7 +22,11 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role, // Incluimos el rol en el token
+    };
 
     return {
       access_token: this.jwtService.sign(payload),
@@ -31,7 +35,7 @@ export class AuthService {
 
   // REGISTER
   async register(registerDto: RegisterDto) {
-    const { first_name, last_name, email, password } = registerDto;
+    const { first_name, last_name, email, password, role = 'user' } = registerDto;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -40,6 +44,7 @@ export class AuthService {
       last_name,
       email,
       password: hashedPassword,
+      role,
     });
   }
 }

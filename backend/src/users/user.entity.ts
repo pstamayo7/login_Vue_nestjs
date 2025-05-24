@@ -22,4 +22,7 @@ export class User {
 
   @UpdateDateColumn({ type: 'datetime' })
   updated_at: Date;  // Fecha de última actualización de la cuenta
+  @Column({ default: 'user' })
+role: string;  // Rol del usuario: 'admin' o 'user'
+
 }

@@ -1,28 +1,30 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Role } from '../roles/role.entity';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;  // Identificador único para cada usuario
+  id: number;
 
   @Column()
-  email: string;  // El correo electrónico del usuario (único)
+  email: string;
 
   @Column()
-  password: string;  // Contraseña del usuario (encriptada)
+  password: string;
 
   @Column({ nullable: true })
-  first_name: string;  // Nombre del usuario (opcional)
+  first_name: string;
 
   @Column({ nullable: true })
-  last_name: string;  // Apellido del usuario (opcional)
+  last_name: string;
+
+  @ManyToOne(() => Role, { eager: true })  // eager para traer el rol automáticamente
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
 
   @CreateDateColumn({ type: 'datetime' })
-  created_at: Date;  // Fecha de creación de la cuenta
+  created_at: Date;
 
   @UpdateDateColumn({ type: 'datetime' })
-  updated_at: Date;  // Fecha de última actualización de la cuenta
-  @Column({ default: 'user' })
-role: string;  // Rol del usuario: 'admin' o 'user'
-
+  updated_at: Date;
 }

@@ -4,6 +4,8 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
 
+import { Role } from './roles/role.entity';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -14,7 +16,7 @@ import { AuthModule } from './auth/auth.module';
       password: 'root', // la contraseña que configuraste
       database: 'bdd_login',
       synchronize: false, // no usar en producción
-      entities: [User],
+      entities: [User, Role],
       options: {
         encrypt: false,
         trustServerCertificate: true, // solo para desarrollo

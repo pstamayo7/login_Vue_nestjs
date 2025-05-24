@@ -4,6 +4,8 @@ import { RegisterDto } from '../auth/register.dto'; // Asegúrate de que esté b
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request } from 'express';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import {  ApiResponse } from '@nestjs/swagger';
+import { UserProfileDto } from './dto/user-profile.dto';
 
 
 @ApiTags('Users')
@@ -11,17 +13,16 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // POST /users/register
   @Post('register')
   async register(@Body() userDto: RegisterDto) {
     return this.usersService.create(userDto);
   }
 
-  // GET /users/me (requiere token válido)
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: UserProfileDto })
   @Get('me')
-  getMe(@Req() req: Request) {
-    return req.user;
+  getMe(@Req() req: Request): UserProfileDto {
+    return req.user as any;
   }
 }

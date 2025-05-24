@@ -1,8 +1,9 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './login.dto';
 import { RegisterDto } from './register.dto';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from './jwt-auth.guard'; // Asegúrate de que este guard esté correctamente implementado
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -19,5 +20,13 @@ export class AuthController {
   @ApiOperation({ summary: 'Registro de nuevo usuario' })
   async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Get('validate-token')
+  @ApiOperation({ summary: 'Valida si el token es correcto' })
+  validateToken() {
+    return { message: 'Token válido' };
   }
 }

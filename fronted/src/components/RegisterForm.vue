@@ -1,52 +1,60 @@
 <template>
-  <div class="register-form">
-    <h2>Register</h2>
-    <form @submit.prevent="handleRegister">
-      <div class="form-group">
-        <label for="first_name">Name</label>
-        <input
-          type="text"
-          id="firs_name"
-          v-model="first_name"
-          required
-          placeholder="Enter your full name"
-        />
-      </div>
-      <div class="form-group">
-        <label for="last_name">Surname</label>
-        <input
-          type="text"
-          id="last_name"
-          v-model="last_name"
-          required
-          placeholder="Enter your surname"
-        />
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          v-model="email"
-          required
-          placeholder="Enter your email"
-        />
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          v-model="password"
-          required
-          placeholder="Enter your password"
-        />
-      </div>
-      <button type="submit">Register</button>
-    </form>
-    <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
+  <div class="admin-register-wrapper">
+    <div class="register-panel">
+      <h2 class="title">User Management</h2>
+      <form @submit.prevent="handleRegister" class="register-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input
+              type="text"
+              id="first_name"
+              v-model="first_name"
+              required
+              placeholder="John"
+            />
+          </div>
+          <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input
+              type="text"
+              id="last_name"
+              v-model="last_name"
+              required
+              placeholder="Doe"
+            />
+          </div>
+        </div>
 
-   
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              v-model="email"
+              required
+              placeholder="admin@example.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              v-model="password"
+              required
+              placeholder="********"
+            />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit">Register User</button>
+        </div>
+        <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -66,80 +74,106 @@ export default {
   methods: {
     async handleRegister() {
       try {
-        // Enviar los datos al backend para registrar el usuario
         await axios.post('http://localhost:3000/auth/register', {
           first_name: this.first_name,
           last_name: this.last_name,
           email: this.email,
           password: this.password,
         });
-
-        alert('Registration successful!');
-        this.$emit('go-to-login');  // Emitir evento para ir al login
+        alert('User registered successfully!');
+        this.$emit('go-to-login');
       } catch (error) {
         this.errorMessage = 'An error occurred. Please try again later.';
       }
-    },
-    goToLogin() {
-      this.$emit('go-to-login');  // Emitir evento para ir al login
     },
   },
 };
 </script>
 
 <style scoped>
-.register-form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 1em;
-  border: 1px solid #ccc;
+.admin-register-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 3rem 4rem;
+  min-height: 100vh;
+  background-color: #eef2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.register-panel {
+  background-color: #ffffff;
+  padding: 2rem 2.5rem;
   border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 700px;
+}
+
+.title {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
 }
 
 .form-group {
-  margin-bottom: 1em;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 label {
-  display: block;
-  margin-bottom: 0.5em;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #34495e;
 }
 
 input {
-  width: 100%;
-  padding: 0.8em;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  border-color: #2980b9;
+  outline: none;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
 }
 
 button {
-  width: 100%;
-  padding: 1em;
-  font-size: 1em;
-  background-color: #257227;
+  background-color: #2980b9;
   color: white;
+  padding: 0.9rem 1.5rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-size: 1rem;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #1c5980;
 }
 
 .error {
-  color: red;
-  margin-top: 1em;
-}
-
-p {
-  margin-top: 1em;
-  text-align: center;
-}
-
-a {
-  color: #4CAF50;
-  cursor: pointer;
+  margin-top: 1rem;
+  color: #e74c3c;
+  font-weight: 500;
 }
 </style>

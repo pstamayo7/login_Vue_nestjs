@@ -13,12 +13,13 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],  // Permitir ciertos encabezados
   });
 
-  // Configuración de Swagger
-  const config = new DocumentBuilder()
-    .setTitle('API de Login')
-    .setDescription('Endpoints de autenticación para login y registro')
-    .setVersion('1.0')
-    .build();
+const config = new DocumentBuilder()
+  .setTitle('API de Login')
+  .setDescription('Endpoints de autenticación para login y registro')
+  .setVersion('1.0')
+  .addBearerAuth()  // <--- agrega esta línea para habilitar JWT Bearer en Swagger
+  .build();
+
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

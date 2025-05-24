@@ -1,14 +1,27 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './user.entity';
+import { RegisterDto } from '../auth/register.dto'; // Asegúrate de que esté bien importado
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Request } from 'express';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
+
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // Endpoint para registrar un nuevo usuario
+  // POST /users/register
   @Post('register')
-  async register(@Body() user: User) {
-    return this.usersService.create(user);
+  async register(@Body() userDto: RegisterDto) {
+    return this.usersService.create(userDto);
+  }
+
+  // GET /users/me (requiere token válido)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Get('me')
+  getMe(@Req() req: Request) {
+    return req.user;
   }
 }

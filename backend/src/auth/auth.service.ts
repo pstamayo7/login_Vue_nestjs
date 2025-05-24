@@ -1,49 +1,45 @@
-import * as bcrypt from 'bcryptjs';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
 import { UsersService } from '../users/users.service';
-import { UnauthorizedException } from '@nestjs/common'; 
-import { RegisterDto } from './register.dto';  // Asegúrate de tener el DTO correcto
+import { LoginDto } from './login.dto';
+import { RegisterDto } from './register.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
-    private usersService: UsersService,  // Accede al servicio de usuarios
+    private readonly jwtService: JwtService,
+    private readonly usersService: UsersService,
   ) {}
 
-  // Método para el login
-  async login(loginDto: any) {
+  // LOGIN
+  async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
 
-    // Buscamos al usuario por su correo
-    const foundUser = await this.usersService.findOne(email);
+    const user = await this.usersService.findOne(email);
 
-    // Si el usuario no existe o la contraseña no es correcta, lanzamos un error de autenticación
-    if (!foundUser || !(await bcrypt.compare(password, foundUser.password))) {
-      throw new UnauthorizedException('Invalid credentials');  // Error 401
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Si las credenciales son correctas, generamos el JWT
-    const payload = { email: foundUser.email, sub: foundUser.id };
+    const payload = { sub: user.id, email: user.email };
+
     return {
-      access_token: this.jwtService.sign(payload),  // Generamos el JWT
+      access_token: this.jwtService.sign(payload),
     };
   }
 
- 
+  // REGISTER
   async register(registerDto: RegisterDto) {
     const { first_name, last_name, email, password } = registerDto;
 
-    // Encriptar la contraseña antes de guardarla
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear el nuevo usuario con nombre, apellido, email y contraseña encriptada
-    return await this.usersService.create({
+    return this.usersService.create({
       first_name,
       last_name,
       email,
-      password: hashedPassword,  // Guardar la contraseña encriptada
+      password: hashedPassword,
     });
   }
 }

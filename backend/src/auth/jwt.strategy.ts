@@ -2,23 +2,22 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private usersService: UsersService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'secretKey', // ⚠️ Reemplaza por env var en producción
+      secretOrKey: 'secretKey',
     });
   }
 
   async validate(payload: any) {
-    // Devuelve todo lo que quieras disponible en req.user
-    return {
-      id: payload.sub,
-      email: payload.email,
-      role: payload.role, // 👈 Asegúrate de que esto esté en el payload al generar el token
-    };
+    // Busca el usuario completo en la base de datos con relación a rol
+    const user = await this.usersService.findByIdWithRole(payload.sub);
+    // Retorna el usuario completo para que esté disponible en req.user
+    return user;
   }
 }

@@ -22,6 +22,12 @@ async findAll() {
   async remove(id: number) {
   return this.usersRepository.delete(id);
 }
+async findByIdWithRole(id: number) {
+  return this.usersRepository.findOne({
+    where: { id },
+    relations: ['role'],  // carga la relación con rol
+  });
+}
 
 
   // Crear un nuevo usuario

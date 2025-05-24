@@ -10,6 +10,7 @@ import { Param, Delete, ParseIntPipe } from '@nestjs/common';
 
 
 
+
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -22,20 +23,28 @@ export class UsersController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+
+  @ApiResponse({ status: 200, description: 'Lista de usuarios retornada exitosamente.' })
+  @ApiBearerAuth()
   async findAll() {
     return this.usersService.findAll(); // esto debería hacer join con el rol
   }
-@Delete(':id')
-remove(@Param('id', ParseIntPipe) id: number) {
-  return this.usersService.remove(id);
-}
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Usuario eliminado correctamente.' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado.' })
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.remove(id);
+  }
 
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiResponse({ status: 200, type: UserProfileDto })
   @Get('me')
-  getMe(@Req() req: Request): UserProfileDto {
-    return req.user as any;
+  getMe(@Req() req: Request) {
+    return req.user;
   }
 }

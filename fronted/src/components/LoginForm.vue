@@ -51,7 +51,7 @@ export default {
 
         localStorage.setItem('token', response.data.access_token);
         alert('Login successful!');
-        this.$emit('go-to-register');
+        this.$emit('login-success');
       } catch (error) {
         if (error.response && error.response.status === 401) {
           this.errorMessage = 'Invalid credentials. Please try again.';

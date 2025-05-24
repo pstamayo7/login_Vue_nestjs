@@ -46,10 +46,7 @@
     </form>
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
 
-    <p>
-      Already have an account? 
-      <a href="#" @click.prevent="goToLogin">Login here</a>
-    </p>
+   
   </div>
 </template>
 

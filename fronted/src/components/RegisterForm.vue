@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../api'; // Asegúrate que api.js esté correctamente ubicado
 
 export default {
   data() {
@@ -74,7 +74,7 @@ export default {
   methods: {
     async handleRegister() {
       try {
-        await axios.post('http://localhost:3000/auth/register', {
+        await api.post('/auth/register', {
           first_name: this.first_name,
           last_name: this.last_name,
           email: this.email,

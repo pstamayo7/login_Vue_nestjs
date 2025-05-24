@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import api from '../api'; // Asegúrate de que la ruta sea correcta
 import UserRegister from './RegisterForm.vue'; // Reutilizamos el formulario de registro
 
 export default {
@@ -28,8 +29,20 @@ export default {
       activeView: 'welcome', // Por defecto, muestra mensaje de bienvenida
     };
   },
+  async mounted() {
+    try {
+      // Verificar si el token es válido haciendo una solicitud protegida
+      await api.get('/users/me');
+    } catch (error) {
+      console.error('Token inválido o expirado:', error);
+      alert('No autorizado. Redirigiendo al login...');
+      localStorage.removeItem('token');
+      window.location.href = '/'; // Redirige al login
+    }
+  },
 };
 </script>
+
 
 <style scoped>
 .admin-dashboard {

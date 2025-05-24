@@ -3,6 +3,9 @@
     <aside class="sidebar">
       <h2 @click="activeView = 'welcome'" style="cursor: pointer">Panel de Administración</h2>
       <button @click="activeView = 'register'">Administrar Usuarios</button>
+      <button @click="logout" style="margin-top: 1rem; background: red; color: white;">
+        Logout
+      </button>
     </aside>
 
     <main class="main-content">
@@ -17,8 +20,8 @@
 </template>
 
 <script>
-import api from '../api'; // Asegúrate de que la ruta sea correcta
-import UserRegister from './RegisterForm.vue'; // Reutilizamos el formulario de registro
+import api from '../api';
+import UserRegister from './RegisterForm.vue';
 
 export default {
   components: {
@@ -26,22 +29,28 @@ export default {
   },
   data() {
     return {
-      activeView: 'welcome', // Por defecto, muestra mensaje de bienvenida
+      activeView: 'welcome',
     };
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('token');
+      // Recarga o redirige a la página raíz (login)
+      window.location.href = '/';
+    },
   },
   async mounted() {
     try {
-      // Verificar si el token es válido haciendo una solicitud protegida
       await api.get('/users/me');
     } catch (error) {
       console.error('Token inválido o expirado:', error);
       alert('No autorizado. Redirigiendo al login...');
-      localStorage.removeItem('token');
-      window.location.href = '/'; // Redirige al login
+      this.logout();
     }
   },
 };
 </script>
+
 
 
 <style scoped>

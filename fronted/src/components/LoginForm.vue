@@ -5,23 +5,11 @@
       <form @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            v-model="email"
-            required
-            placeholder="Enter your email"
-          />
+          <input type="email" id="email" v-model="email" required placeholder="Enter your email" />
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            v-model="password"
-            required
-            placeholder="Enter your password"
-          />
+          <input type="password" id="password" v-model="password" required placeholder="Enter your password" />
         </div>
         <button type="submit">Log In</button>
         <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
@@ -32,6 +20,8 @@
 
 <script>
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+
 
 export default {
   data() {
@@ -49,9 +39,17 @@ export default {
           password: this.password,
         });
 
-        localStorage.setItem('token', response.data.access_token);
+        const token = response.data.access_token;
+        localStorage.setItem('token', token);
+
+        // Decodifica el token para obtener el rol
+        const decoded = jwtDecode(token);
+
+        // decoded.role_id debe existir según el payload que pongas en backend
+
         alert('Login successful!');
-        this.$emit('login-success');
+        // Emite el rol para que el padre lo reciba
+        this.$emit('login-success', decoded.role);
       } catch (error) {
         if (error.response && error.response.status === 401) {
           this.errorMessage = 'Invalid credentials. Please try again.';
@@ -63,6 +61,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 /* Container to center the login card */

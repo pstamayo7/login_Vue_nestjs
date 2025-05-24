@@ -13,7 +13,16 @@ export class UsersService {
   async findOne(email: string): Promise<User | null> {
     return this.usersRepository.findOne({ where: { email } });
   }
-  
+
+  // users.service.ts
+async findAll() {
+  return this.usersRepository.find({ relations: ['role'] });
+}
+
+  async remove(id: number) {
+  return this.usersRepository.delete(id);
+}
+
 
   // Crear un nuevo usuario
   async create(user: Partial<User>): Promise<User> {

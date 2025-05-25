@@ -1,101 +1,110 @@
-# login_Vue_nestjs
-Proyecto de login usando Vue.js en el frontend y NestJS en el backend con JWT
 
+# Proyecto Administración de Usuarios con NestJS y Vue.js
 
-Proyecto Administración de Usuarios con NestJS y Vue.js
-Descripción
-Este proyecto es una aplicación fullstack para la gestión de usuarios con autenticación basada en JWT, roles (admin y usuario), dashboards diferenciados, y manejo CRUD básico de usuarios.
-El backend está hecho con NestJS y el frontend con Vue.js.
+## 📝 Descripción
 
-Funcionalidades principales
-Registro de usuarios con asignación de roles.
+Este proyecto es una aplicación **fullstack** para la gestión de usuarios con autenticación basada en **JWT**, roles (**admin** y **usuario**), dashboards diferenciados, y manejo **CRUD básico de usuarios**.  
+El **backend** está hecho con **NestJS** y el **frontend** con **Vue.js**.
 
-Login con JWT.
+---
 
-Control de acceso por roles (admin y usuario).
+## 🚀 Funcionalidades principales
 
-Dashboard de administración con listado, creación y eliminación de usuarios (solo admins).
+- ✅ Registro de usuarios con asignación de roles
+- 🔐 Login con JWT
+- 🔒 Control de acceso por roles (admin y usuario)
+- 🧑‍💼 Dashboard de administración: listado, creación y eliminación de usuarios (solo admins)
+- 👤 Dashboard para usuarios normales con visualización de sus datos
+- 🚪 Logout para cerrar sesión
+- 📚 Documentación automática con Swagger (`/api`)
 
-Dashboard para usuarios normales con visualización de sus datos.
+---
 
-Logout para cerrar sesión.
+## 🛠 Tecnologías usadas
 
-Documentación automática con Swagger (backend).
+### Backend
 
-Tecnologías usadas
-Backend
-NestJS
+- [NestJS](https://nestjs.com/)
+- TypeORM
+- JWT (Json Web Token)
+- Swagger
 
-TypeORM
+### Frontend
 
-JWT para autenticación
+- [Vue.js](https://vuejs.org/)
+- Axios
+- jwt-decode
 
-Swagger para documentación
+---
 
-Frontend
-Vue.js
+## ⚙️ Instalación y ejecución
 
-Axios para llamadas HTTP
+### 📦 Backend
 
-jwt-decode para decodificar tokens en frontend
-
-Instalación y ejecución
-Backend
-bash
-Copiar
-Editar
+```bash
 cd backend
 npm install
 npm run start:dev
-El backend correrá por defecto en http://localhost:3000.
+```
 
-Frontend
-bash
-Copiar
-Editar
+El backend correrá en: `http://localhost:3000`
+
+### 💻 Frontend
+
+```bash
 cd frontend
 npm install
 npm run serve
-El frontend correrá por defecto en http://localhost:8080.
+```
 
-Uso
-Registrar un usuario (con rol asignado).
+El frontend correrá en: `http://localhost:8080`
 
-Iniciar sesión con email y contraseña.
+---
 
-Según el rol, se redirige a:
+## 🧪 Uso
 
-AdminDashboard: gestionar usuarios.
+1. Registrar un usuario (con rol asignado)
+2. Iniciar sesión con email y contraseña
+3. Según el rol, se redirige a:
+   - 🧑‍💼 AdminDashboard: gestionar usuarios
+   - 👤 UserDashboard: ver sus datos
+4. Usar botón de logout para cerrar sesión
 
-UserDashboard: ver sus datos.
+---
 
-Usar botón de logout para cerrar sesión.
+## 📌 Endpoints principales
 
-Endpoints principales
-POST /auth/register: registrar nuevo usuario.
+- `POST /auth/register`: registrar nuevo usuario
+- `POST /auth/login`: login y obtención de JWT
+- `GET /users/me`: obtener datos del usuario autenticado
+- `GET /users`: obtener lista de usuarios (solo admins)
+- `DELETE /users/:id`: eliminar usuario (solo admins)
 
-POST /auth/login: login y obtención de JWT.
+La documentación Swagger está disponible en: `http://localhost:3000/api`
 
-GET /users/me: obtener datos del usuario autenticado.
+---
 
-GET /users: obtener lista de usuarios (solo admins).
+## 📁 Estructura del proyecto
 
-DELETE /users/:id: eliminar usuario (solo admins).
+```
+backend/   → código NestJS (controladores, servicios, entidades, auth, roles)
+frontend/  → código Vue.js (componentes, pantallas, manejo de token)
+```
 
-La documentación Swagger está disponible en /api (puedes acceder cuando el backend esté corriendo).
+---
 
-Estructura del proyecto
-backend/: código NestJS (controladores, servicios, entidades, auth, roles)
+## ⚠️ Notas
 
-frontend/: código Vue.js (componentes, páginas, manejo de token, rutas)
+- La clave secreta JWT está actualmente hardcodeada en `JwtStrategy`. Se recomienda usar variables de entorno en producción (`.env`).
+- Las rutas protegidas usan `JwtAuthGuard` y validación por rol para controlar el acceso.
 
-Notas
-La clave secreta JWT está actualmente hardcodeada en JwtStrategy. Se recomienda usar variables de entorno en producción.
+---
 
-Las rutas protegidas usan guardias de NestJS para controlar el acceso.
+## ✍️ Autor
 
-El token JWT incluye el rol del usuario para validaciones en frontend.
+**Tu Nombre**  
+https://github.com/pstamayo7
 
-Autor
-Tu Nombre - Pstamayo7
+---
+
 
